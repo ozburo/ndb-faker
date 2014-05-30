@@ -24,7 +24,9 @@ try:
     from faker import Faker, numerify, patterns
 except ImportError:
     raise RuntimeError(
-        'Faker module required: https://github.com/deepthawtz/faker')
+        'Faker module required: https://github.com/deepthawtz/faker\n\
+        This package includes the Faker module as git submodule.\n\
+        Simply swap the inner "faker" folder with the outer "faker" folder.')
 
 # --------------------------------------------------------------------
 # Faker
