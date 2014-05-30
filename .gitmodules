@@ -1,0 +1,3 @@
+[submodule "faker"]
+	path = faker
+	url = https://github.com/deepthawtz/faker.git

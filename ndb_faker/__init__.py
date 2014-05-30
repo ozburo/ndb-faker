@@ -308,7 +308,7 @@ class BlobProperty(ndb.BlobProperty):
 
     def __init__(self, **kwargs):
         raise NotImplementedError()
-        super(BooleanProperty, self).__init__(**kwargs)
+        super(BlobProperty, self).__init__(**kwargs)
 
 # --------------------------------------------------------------------
 # Blob Key Property
