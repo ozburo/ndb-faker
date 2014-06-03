@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    ndb-faker
+    NDB Faker
     ~~~~~~~~~
 
     NDB Model & Properties for creating entities with fake data.

@@ -323,6 +323,22 @@ class FakeTestCase(BaseTestCase):
             prop = model.BooleanProperty()
         entity = Model.create()
 
+        self.assertIsInstance(entity.prop, bool)
+
+    def test_boolean_property_value_fake(self):
+        class Model(model.Model):
+            prop = model.BooleanProperty(fake='chance')
+        entity = Model.create()
+
+        self.assertIsInstance(entity.prop, bool)
+
+    def test_boolean_property_value_prop(self):
+        class Model(model.Model):
+            chance = model.BooleanProperty()
+        entity = Model.create()
+
+        self.assertIsInstance(entity.chance, bool)
+
     def test_boolean_property_required(self):
         class Model(model.Model):
             prop = model.BooleanProperty(required=True)
@@ -535,6 +551,22 @@ class FakeTestCase(BaseTestCase):
             prop = model.DateTimeProperty()
         entity = Model.create()
 
+        self.assertIsInstance(entity.prop, datetime.datetime)
+
+    def test_datetime_property_value_fake(self):
+        class Model(model.Model):
+            prop = model.DateTimeProperty(fake='now')
+        entity = Model.create()
+
+        self.assertIsInstance(entity.prop, datetime.datetime)
+
+    def test_datetime_property_value_prop(self):
+        class Model(model.Model):
+            now = model.DateTimeProperty()
+        entity = Model.create()
+
+        self.assertIsInstance(entity.now, datetime.datetime)
+
     def test_datetime_property_required(self):
         class Model(model.Model):
             prop = model.DateTimeProperty(required=True)
@@ -577,6 +609,22 @@ class FakeTestCase(BaseTestCase):
             prop = model.DateProperty()
         entity = Model.create()
 
+        self.assertIsInstance(entity.prop, datetime.date)
+
+    def test_date_property_value_fake(self):
+        class Model(model.Model):
+            prop = model.DateProperty(fake='today')
+        entity = Model.create()
+
+        self.assertIsInstance(entity.prop, datetime.date)
+
+    def test_date_property_value_prop(self):
+        class Model(model.Model):
+            today = model.DateProperty()
+        entity = Model.create()
+
+        self.assertIsInstance(entity.today, datetime.date)
+
     def test_date_property_required(self):
         class Model(model.Model):
             prop = model.DateProperty(required=True)
@@ -618,6 +666,22 @@ class FakeTestCase(BaseTestCase):
         class Model(model.Model):
             prop = model.TimeProperty()
         entity = Model.create()
+
+        self.assertIsInstance(entity.prop, datetime.time)
+
+    def test_time_property_value_fake(self):
+        class Model(model.Model):
+            prop = model.TimeProperty(fake='timestamp')
+        entity = Model.create()
+
+        self.assertIsInstance(entity.prop, datetime.time)
+
+    def test_time_property_value_prop(self):
+        class Model(model.Model):
+            timestamp = model.TimeProperty()
+        entity = Model.create()
+
+        self.assertIsInstance(entity.timestamp, datetime.time)
 
     def test_time_property_required(self):
         class Model(model.Model):
@@ -672,6 +736,20 @@ class FakeTestCase(BaseTestCase):
 
         self.assertIn(entity.username, entity.user.email())
 
+    def test_user_property_value_fake(self):
+        class Model(model.Model):
+            prop = model.UserProperty(fake='user')
+        entity = Model.create()
+
+        self.assertIsInstance(entity.prop, users.User)
+
+    def test_user_property_value_prop(self):
+        class Model(model.Model):
+            user = model.UserProperty()
+        entity = Model.create()
+
+        self.assertIsInstance(entity.user, users.User)
+
     def test_user_property_required(self):
         class Model(model.Model):
             prop = model.UserProperty(required=True)
@@ -714,6 +792,20 @@ class FakeTestCase(BaseTestCase):
         entity = Model.create()
 
         self.assertIsInstance(entity.prop, ndb.GeoPt)
+
+    def test_geopt_property_value_fake(self):
+        class Model(model.Model):
+            prop = model.GeoPtProperty(fake='coordinates')
+        entity = Model.create()
+
+        self.assertIsInstance(entity.prop, ndb.GeoPt)
+
+    def test_geopt_property_value_prop(self):
+        class Model(model.Model):
+            coordinates = model.GeoPtProperty()
+        entity = Model.create()
+
+        self.assertIsInstance(entity.coordinates, ndb.GeoPt)
 
     def test_geopt_property_required(self):
         class Model(model.Model):
@@ -758,6 +850,20 @@ class FakeTestCase(BaseTestCase):
 
         self.assertIsInstance(entity.prop, ndb.Key)
 
+    def test_key_property_value_fake(self):
+        class Model(model.Model):
+            prop = model.KeyProperty(fake='key')
+        entity = Model.create()
+
+        self.assertIsInstance(entity.prop, ndb.Key)
+
+    def test_key_property_value_prop(self):
+        class Model(model.Model):
+            key = model.KeyProperty()
+        entity = Model.create()
+
+        self.assertIsInstance(entity.key, ndb.Key)
+
     def test_key_property_required(self):
         class Model(model.Model):
             prop = model.KeyProperty(required=True)
@@ -801,6 +907,20 @@ class FakeTestCase(BaseTestCase):
 
         self.assertIsInstance(entity.prop, dict)
 
+    def test_json_property_value_fake(self):
+        class Model(model.Model):
+            prop = model.JsonProperty(fake='profile')
+        entity = Model.create()
+
+        self.assertIsInstance(entity.prop, dict)
+
+    def test_json_property_value_prop(self):
+        class Model(model.Model):
+            profile = model.JsonProperty()
+        entity = Model.create()
+
+        self.assertIsInstance(entity.profile, dict)
+
     def test_json_property_required(self):
         class Model(model.Model):
             prop = model.JsonProperty(required=True)
@@ -843,6 +963,20 @@ class FakeTestCase(BaseTestCase):
         entity = Model.create()
 
         self.assertIsInstance(entity.prop, dict)
+
+    def test_pickle_property_value_fake(self):
+        class Model(model.Model):
+            prop = model.PickleProperty(fake='profile')
+        entity = Model.create()
+
+        self.assertIsInstance(entity.prop, dict)
+
+    def test_pickle_property_value_prop(self):
+        class Model(model.Model):
+            profile = model.PickleProperty()
+        entity = Model.create()
+
+        self.assertIsInstance(entity.profile, dict)
 
     def test_pickle_property_required(self):
         class Model(model.Model):

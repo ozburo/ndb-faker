@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    ndb-faker
+    NDB Faker
     ~~~~~~~~~
 
     NDB Model & Properties for creating entities with fake data.
@@ -36,6 +36,10 @@ class Faker(Faker):
     """ Simply subclassing and adding a few more methods """
 
     phone_number = Faker.phonenumber
+    address      = Faker.street_address
+
+    def zip(self):
+        return int(numerify("#####"))
 
     def ssn(self):
         return numerify("###-##-#####")
@@ -64,6 +68,9 @@ class Faker(Faker):
         geo = random.randint(-180000000, 180000000) / 1000000.0
         return float('%0.2f' % geo)
 
+    def coordinates(self):
+        return ndb.GeoPt('%f,%f' % (self.latitude(), self.longitude()))
+
     def profile(self):
         return dict(
             first_name = self.first_name(),
@@ -73,6 +80,30 @@ class Faker(Faker):
             full_address = self.full_address(),
             phone_number = self.phone_number(),
             )
+
+    def user(self):
+        return users.User(self.email())
+
+    def chance(self):
+        return random.randint(1, 100) <= 50
+
+    def integer(self):
+        return random.randint(1, 1000000)
+
+    def float(self):
+        return random.triangular(1, 10000)
+
+    def now(self):
+        return datetime.datetime.now()
+
+    def today(self):
+        return datetime.date.today()
+
+    def timestamp(self):
+        return datetime.datetime.now().time()
+
+    def key(self):
+        return ndb.Key('Model', random.randint(1, 100000))
 
 # --------------------------------------------------------------------
 # Model
@@ -92,7 +123,7 @@ class Model(ndb.Model):
 
     @classmethod
     def generate(cls, count):
-        generator = (Model.create() for i in xrange(count))
+        generator = (cls.create() for i in xrange(count))
         return [entity for entity in generator]
 
 # --------------------------------------------------------------------
@@ -161,7 +192,7 @@ class FakeProperty(Property):
 class IntegerProperty(FakeProperty, ndb.IntegerProperty):
 
     def _get_fallback_value(self, entity):
-        return random.randint(1,1000000)
+        return entity._faker.integer()
 
 # --------------------------------------------------------------------
 # Float Property
@@ -170,16 +201,16 @@ class IntegerProperty(FakeProperty, ndb.IntegerProperty):
 class FloatProperty(FakeProperty, ndb.FloatProperty):
 
     def _get_fallback_value(self, entity):
-        return random.uniform(1000,1)
+        return entity._faker.float()
 
 # --------------------------------------------------------------------
 # Boolean Property
 # --------------------------------------------------------------------
 
-class BooleanProperty(Property, ndb.BooleanProperty):
+class BooleanProperty(FakeProperty, ndb.BooleanProperty):
 
-    def _get_fake_value(self, entity):
-        return random.randint(1, 100) <= 50
+    def _get_fallback_value(self, entity):
+        return entity._faker.chance()
 
 # --------------------------------------------------------------------
 # Text Property
@@ -212,73 +243,72 @@ class GenericProperty(FakeProperty, ndb.GenericProperty):
 # Datetime Property
 # --------------------------------------------------------------------
 
-class DateTimeProperty(Property, ndb.DateTimeProperty):
+class DateTimeProperty(FakeProperty, ndb.DateTimeProperty):
 
-    def _get_fake_value(self, entity):
-        return datetime.datetime.now()
+    def _get_fallback_value(self, entity):
+        return entity._faker.now()
 
 # --------------------------------------------------------------------
 # Date Property
 # --------------------------------------------------------------------
 
-class DateProperty(Property, ndb.DateProperty):
+class DateProperty(FakeProperty, ndb.DateProperty):
 
-    def _get_fake_value(self, entity):
-        return datetime.datetime.now()
+    def _get_fallback_value(self, entity):
+        return entity._faker.today()
 
 # --------------------------------------------------------------------
 # Time Property
 # --------------------------------------------------------------------
 
-class TimeProperty(Property, ndb.TimeProperty):
+class TimeProperty(FakeProperty, ndb.TimeProperty):
 
-    def _get_fake_value(self, entity):
-        return datetime.datetime.now().time()
+    def _get_fallback_value(self, entity):
+        return entity._faker.timestamp()
 
 # --------------------------------------------------------------------
 # GeoPt Property
 # --------------------------------------------------------------------
 
-class GeoPtProperty(Property, ndb.GeoPtProperty):
+class GeoPtProperty(FakeProperty, ndb.GeoPtProperty):
 
-    def _get_fake_value(self, entity):
-        return ndb.GeoPt('%f,%f' %
-            (entity._faker.latitude(), entity._faker.longitude()))
+    def _get_fallback_value(self, entity):
+        return entity._faker.coordinates()
 
 # --------------------------------------------------------------------
 # Key Property
 # --------------------------------------------------------------------
 
-class KeyProperty(Property, ndb.KeyProperty):
+class KeyProperty(FakeProperty, ndb.KeyProperty):
 
-    def _get_fake_value(self, entity):
-        return ndb.Key('Model', random.randint(1, 100000))
+    def _get_fallback_value(self, entity):
+        return entity._faker.key()
 
 # --------------------------------------------------------------------
 # User Property
 # --------------------------------------------------------------------
 
-class UserProperty(Property, ndb.UserProperty):
+class UserProperty(FakeProperty, ndb.UserProperty):
 
-    def _get_fake_value(self, entity):
-        return users.User(entity._faker.email())
+    def _get_fallback_value(self, entity):
+        return entity._faker.user()
 
 # --------------------------------------------------------------------
 # Json Property
 # --------------------------------------------------------------------
 
-class JsonProperty(Property, ndb.JsonProperty):
+class JsonProperty(FakeProperty, ndb.JsonProperty):
 
-    def _get_fake_value(self, entity):
+    def _get_fallback_value(self, entity):
         return entity._faker.profile()
 
 # --------------------------------------------------------------------
 # Pickle Property
 # --------------------------------------------------------------------
 
-class PickleProperty(Property, ndb.PickleProperty):
+class PickleProperty(FakeProperty, ndb.PickleProperty):
 
-    def _get_fake_value(self, entity):
+    def _get_fallback_value(self, entity):
         return entity._faker.profile()
 
 # --------------------------------------------------------------------
