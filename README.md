@@ -1,6 +1,6 @@
 # NDB Faker
 
-NDB Model &amp; Properties for creating entities with fake data for
+NDB Model &amp; Properties for creating entities with fake data on
 Google App Engine's datastore.
 
 
@@ -75,7 +75,7 @@ class MyModel(fake.Model):
 
 ## Model
 
-Using `ndb_faker.Model` exposes a handy `generate` method for creating multiple entities of fake data:
+Using `ndb_faker.Model` exposes a handy `generate` method for creating multiple entities with fake data:
 
 ```python
 
